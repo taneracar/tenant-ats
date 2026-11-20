@@ -94,7 +94,7 @@ export function App() {
       <header className="flex flex-wrap items-end justify-between gap-4 py-6">
         <div>
           <h1 className="text-xl font-semibold tracking-tight">tenant-ats</h1>
-          <p className="max-w-xl text-sm text-stone-500">
+          <p className="max-w-xl text-sm text-stone-500 dark:text-stone-400">
             A staffing-agency ATS where tenant isolation lives in Postgres row-level security, not in app code.
             The database is real Postgres running in this tab ({(bootMs / 1000).toFixed(1)}s to boot, migrate and seed).
           </p>
@@ -103,7 +103,7 @@ export function App() {
       </header>
 
       <Card className="mb-4 p-3">
-        <div className="mb-2 text-xs font-medium text-stone-500">Signed in as (each switch changes the JWT <code>sub</code> Postgres sees)</div>
+        <div className="mb-2 text-xs font-medium text-stone-500 dark:text-stone-400">Signed in as (each switch changes the JWT <code>sub</code> Postgres sees)</div>
         <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Signed-in user">
           {(Object.keys(USERS) as UserKey[]).map((k) => (
             <button key={k} role="radio" aria-checked={k === userKey} onClick={() => setUserKey(k)}
@@ -111,13 +111,13 @@ export function App() {
                 ? 'border-teal-700 bg-teal-50 dark:border-teal-500 dark:bg-teal-950/40'
                 : 'border-stone-200 hover:border-stone-400 dark:border-stone-700'}`}>
               <div className="font-medium">{USERS[k].name}</div>
-              <div className="text-[11px] text-stone-500">{PERSONAS[k]}</div>
+              <div className="text-[11px] text-stone-500 dark:text-stone-400">{PERSONAS[k]}</div>
             </button>
           ))}
         </div>
         {memberships.length > 0 && (
           <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-stone-100 pt-3 text-sm dark:border-stone-800">
-            <span className="text-xs text-stone-500">Agency</span>
+            <span className="text-xs text-stone-500 dark:text-stone-400">Agency</span>
             {memberships.map((m) => (
               <button key={m.agency_id} onClick={() => setAgencyId(m.agency_id)}
                 className={`flex items-center gap-2 rounded-full px-3 py-1 ${m.agency_id === agencyId ? 'bg-stone-900 text-white dark:bg-white dark:text-stone-900' : 'hover:bg-stone-100 dark:hover:bg-stone-800'}`}>
@@ -131,7 +131,7 @@ export function App() {
       {!membership ? (
         <Card className="p-6">
           <p className="font-medium">{user.name} belongs to no agency.</p>
-          <p className="mt-1 text-sm text-stone-500">Every table returns zero rows for this user. The app does not filter anything; Postgres does. Try it in the console:</p>
+          <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">Every table returns zero rows for this user. The app does not filter anything; Postgres does. Try it in the console:</p>
           <div className="mt-4"><RlsLab db={db} user={user.id} userName={user.name} agency={AGENCIES.harbor.id} otherAgency={AGENCIES.harbor} /></div>
         </Card>
       ) : (
@@ -147,7 +147,7 @@ export function App() {
           <nav className="mb-3 flex gap-1 text-sm" role="tablist">
             {([['pipeline', 'Pipeline'], ['margins', 'Margins'], ['lab', 'RLS lab']] as const).map(([k, label]) => (
               <button key={k} role="tab" aria-selected={tab === k} onClick={() => setTab(k)}
-                className={`rounded-lg px-3 py-1.5 ${tab === k ? 'bg-white font-medium shadow-sm ring-1 ring-stone-200 dark:bg-stone-900 dark:ring-stone-700' : 'text-stone-500 hover:text-stone-900 dark:hover:text-white'}`}>
+                className={`rounded-lg px-3 py-1.5 ${tab === k ? 'bg-white font-medium shadow-sm ring-1 ring-stone-200 dark:bg-stone-900 dark:ring-stone-700' : 'text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'}`}>
                 {label}
               </button>
             ))}
@@ -165,16 +165,16 @@ export function App() {
             <div className="flex items-start justify-between">
               <div>
                 <h2 className="font-semibold">{open.row.candidate}</h2>
-                <p className="text-sm text-stone-500">{open.row.title} · {open.row.client}</p>
+                <p className="text-sm text-stone-500 dark:text-stone-400">{open.row.title} · {open.row.client}</p>
               </div>
-              <button onClick={() => setOpen(null)} aria-label="Close" className="text-stone-400 hover:text-stone-900 dark:hover:text-white">✕</button>
+              <button onClick={() => setOpen(null)} aria-label="Close" className="text-stone-500 dark:text-stone-400 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white">✕</button>
             </div>
-            <p className="mt-4 text-xs text-stone-500">Stage history. Written by a trigger, never by the client, so it cannot be forged.</p>
+            <p className="mt-4 text-xs text-stone-500 dark:text-stone-400">Stage history. Written by a trigger, never by the client, so it cannot be forged.</p>
             <ol className="mt-3 space-y-3 border-l border-stone-200 pl-4 dark:border-stone-700">
               {open.events.map((e, i) => (
                 <li key={i} className="text-sm">
                   <div className="flex items-center gap-2">{e.from_stage && <><StagePill stage={e.from_stage} /> →</>} <StagePill stage={e.to_stage} /></div>
-                  <div className="mt-1 text-[11px] text-stone-500">{new Date(e.at).toLocaleString()} · {e.actor ?? 'system'}</div>
+                  <div className="mt-1 text-[11px] text-stone-500 dark:text-stone-400">{new Date(e.at).toLocaleString()} · {e.actor ?? 'system'}</div>
                 </li>
               ))}
             </ol>
@@ -197,22 +197,22 @@ function Margins({ data }: { data: MarginRow[] | string }) {
       <Card className="p-6">
         <p className="font-medium">The database refused this report.</p>
         <p className="mt-2 rounded bg-rose-50 px-3 py-2 font-mono text-[13px] text-rose-800 dark:bg-rose-950/50 dark:text-rose-300">{data}</p>
-        <p className="mt-2 text-sm text-stone-500">Margins need pay rates, and pay rates are hidden from viewers by policy. The UI did not hide this tab; Postgres answered.</p>
+        <p className="mt-2 text-sm text-stone-500 dark:text-stone-400">Margins need pay rates, and pay rates are hidden from viewers by policy. The UI did not hide this tab; Postgres answered.</p>
       </Card>
     )
   }
   const max = Math.max(...data.map((d) => d.margin_pct), 1)
   return (
-    <Card className="overflow-x-auto">
+    <Card><div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Margin by job order">
       <table className="w-full text-sm">
-        <thead><tr className="text-left text-xs text-stone-500">
+        <thead><tr className="text-left text-xs text-stone-500 dark:text-stone-400">
           {['Job order', 'Client', 'Placed', 'Avg bill', 'Avg pay', 'Gross margin'].map((h) => <th key={h} className="px-3 py-2 font-medium">{h}</th>)}
         </tr></thead>
         <tbody>
           {data.map((d, i) => (
             <tr key={i} className="border-t border-stone-100 dark:border-stone-800/70">
               <td className="px-3 py-2">{d.title}</td>
-              <td className="px-3 py-2 text-stone-500">{d.client}</td>
+              <td className="px-3 py-2 text-stone-500 dark:text-stone-400">{d.client}</td>
               <td className="px-3 py-2 tabular-nums">{d.placements}</td>
               <td className="px-3 py-2 tabular-nums">{money(d.avg_bill)}</td>
               <td className="px-3 py-2 tabular-nums">{money(d.avg_pay)}</td>
@@ -226,13 +226,14 @@ function Margins({ data }: { data: MarginRow[] | string }) {
               </td>
             </tr>
           ))}
-          {data.length === 0 && <tr><td colSpan={6} className="px-3 py-8 text-center text-stone-500">No placements yet.</td></tr>}
+          {data.length === 0 && <tr><td colSpan={6} className="px-3 py-8 text-center text-stone-500 dark:text-stone-400">No placements yet.</td></tr>}
         </tbody>
       </table>
+      </div>
     </Card>
   )
 }
 
 function Centered({ children }: { children: React.ReactNode }) {
-  return <div className="grid min-h-screen place-items-center px-4 text-center text-sm text-stone-500">{children}</div>
+  return <div className="grid min-h-screen place-items-center px-4 text-center text-sm text-stone-500 dark:text-stone-400">{children}</div>
 }

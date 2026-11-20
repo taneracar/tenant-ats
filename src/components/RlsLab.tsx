@@ -54,20 +54,20 @@ export function RlsLab({ db, user, userName, agency, otherAgency }: Props) {
     <div className="grid gap-4 lg:grid-cols-[320px_1fr]">
       <Card className="p-3">
         <h3 className="px-1 text-sm font-semibold">Try to break it</h3>
-        <p className="px-1 pb-2 text-xs text-stone-500">Each probe runs as {userName} with role <code>authenticated</code>. Writes are rolled back.</p>
+        <p className="px-1 pb-2 text-xs text-stone-500 dark:text-stone-400">Each probe runs as {userName} with role <code>authenticated</code>. Writes are rolled back.</p>
         <ul className="space-y-1">
           {probes.map((p) => (
             <li key={p.label}>
               <button onClick={() => run(p.sql)} className="w-full rounded-lg px-2 py-2 text-left hover:bg-stone-100 dark:hover:bg-stone-800">
                 <div className="text-sm">{p.label}</div>
-                <div className="text-[11px] text-stone-500">{p.expect}</div>
+                <div className="text-[11px] text-stone-500 dark:text-stone-400">{p.expect}</div>
               </button>
             </li>
           ))}
         </ul>
       </Card>
       <Card className="flex min-w-0 flex-col">
-        <label htmlFor="sql" className="border-b border-stone-200 px-3 py-2 text-xs text-stone-500 dark:border-stone-800">
+        <label htmlFor="sql" className="border-b border-stone-200 px-3 py-2 text-xs text-stone-500 dark:text-stone-400 dark:border-stone-800">
           SQL as <span className="font-medium text-stone-800 dark:text-stone-200">{userName}</span>. Real Postgres 18 (PGlite), running in this tab.
         </label>
         <textarea
@@ -76,7 +76,7 @@ export function RlsLab({ db, user, userName, agency, otherAgency }: Props) {
           className="w-full resize-y bg-transparent p-3 font-mono text-[13px] outline-none"
         />
         <div className="flex items-center justify-between border-t border-stone-200 px-3 py-2 dark:border-stone-800">
-          <span className="text-[11px] text-stone-500">⌘/Ctrl + Enter</span>
+          <span className="text-[11px] text-stone-500 dark:text-stone-400">⌘/Ctrl + Enter</span>
           <button onClick={() => run()} disabled={running}
             className="rounded-lg bg-teal-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-teal-800 disabled:opacity-50">
             {running ? 'Running…' : 'Run'}
@@ -100,14 +100,14 @@ function ResultView({ r }: { r: RunResult }) {
   const cols = r.rows[0] ? Object.keys(r.rows[0]) : []
   return (
     <div role="status" className="border-t border-stone-200 dark:border-stone-800">
-      <div className="px-3 py-2 text-xs text-stone-500">
+      <div className="px-3 py-2 text-xs text-stone-500 dark:text-stone-400">
         {r.rows.length} row{r.rows.length === 1 ? '' : 's'}
         {r.affected != null && r.rows.length === 0 ? ` · ${r.affected} affected (rolled back)` : ''} · {r.ms.toFixed(1)} ms
       </div>
       {cols.length > 0 && (
-        <div className="max-h-72 overflow-auto">
+        <div className="max-h-72 overflow-auto" tabIndex={0} role="region" aria-label="Query result">
           <table className="w-full font-mono text-[12px]">
-            <thead><tr>{cols.map((c) => <th key={c} className="px-3 py-1 text-left font-medium text-stone-500">{c}</th>)}</tr></thead>
+            <thead><tr>{cols.map((c) => <th key={c} className="px-3 py-1 text-left font-medium text-stone-500 dark:text-stone-400">{c}</th>)}</tr></thead>
             <tbody>
               {r.rows.slice(0, 100).map((row, i) => (
                 <tr key={i} className="border-t border-stone-100 dark:border-stone-800/70">

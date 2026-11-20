@@ -36,7 +36,7 @@ export function Stat({ label, value, hint }: { label: string; value: ReactNode; 
     <Card className="px-4 py-3">
       <div className="text-xs text-stone-500 dark:text-stone-400">{label}</div>
       <div className="mt-1 text-2xl font-semibold tabular-nums">{value}</div>
-      {hint && <div className="mt-0.5 text-[11px] text-stone-400">{hint}</div>}
+      {hint && <div className="mt-0.5 text-[11px] text-stone-500 dark:text-stone-400">{hint}</div>}
     </Card>
   )
 }

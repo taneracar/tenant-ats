@@ -34,13 +34,13 @@ export function Pipeline({ rows, canWrite, onStage, onOpen }: Props) {
         cell: ({ row }) => (
           <button onClick={() => onOpen(row.original)} className="text-left">
             <div className="font-medium hover:underline">{row.original.candidate}</div>
-            <div className="text-[11px] text-stone-500">{row.original.skills.join(' · ')}</div>
+            <div className="text-[11px] text-stone-500 dark:text-stone-400">{row.original.skills.join(' · ')}</div>
           </button>
         ),
       },
       {
         header: 'Job order', accessorKey: 'title',
-        cell: ({ row }) => (<div><div>{row.original.title}</div><div className="text-[11px] text-stone-500">{row.original.client}</div></div>),
+        cell: ({ row }) => (<div><div>{row.original.title}</div><div className="text-[11px] text-stone-500 dark:text-stone-400">{row.original.client}</div></div>),
       },
       {
         header: 'Stage', accessorKey: 'stage',
@@ -72,7 +72,7 @@ export function Pipeline({ rows, canWrite, onStage, onOpen }: Props) {
       { header: 'Recruiter', accessorKey: 'recruiter', cell: (c) => <span className="text-stone-600 dark:text-stone-400">{c.getValue<string>() ?? '—'}</span> },
       {
         header: 'Updated', accessorKey: 'updated_at',
-        cell: (c) => <span className="tabular-nums text-stone-500">{new Date(c.getValue<string>()).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</span>,
+        cell: (c) => <span className="tabular-nums text-stone-500 dark:text-stone-400">{new Date(c.getValue<string>()).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</span>,
       },
     )
     return cols
@@ -120,11 +120,11 @@ export function Pipeline({ rows, canWrite, onStage, onOpen }: Props) {
           ))}
         </div>
       </div>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Submissions">
         <table className="w-full text-sm">
           <thead>
             {table.getHeaderGroups().map((hg) => (
-              <tr key={hg.id} className="text-left text-xs text-stone-500">
+              <tr key={hg.id} className="text-left text-xs text-stone-500 dark:text-stone-400">
                 {hg.headers.map((h) => (
                   <th key={h.id} className="whitespace-nowrap px-3 py-2 font-medium">
                     <button onClick={h.column.getToggleSortingHandler()} className="inline-flex items-center gap-1 hover:text-stone-900 dark:hover:text-white">
@@ -143,12 +143,12 @@ export function Pipeline({ rows, canWrite, onStage, onOpen }: Props) {
               </tr>
             ))}
             {table.getRowModel().rows.length === 0 && (
-              <tr><td colSpan={8} className="px-3 py-8 text-center text-stone-500">No rows. Row-level security returned nothing for this user, or the filter matched nothing.</td></tr>
+              <tr><td colSpan={8} className="px-3 py-8 text-center text-stone-500 dark:text-stone-400">No rows. Row-level security returned nothing for this user, or the filter matched nothing.</td></tr>
             )}
           </tbody>
         </table>
       </div>
-      <div className="flex items-center justify-between border-t border-stone-200 px-3 py-2 text-xs text-stone-500 dark:border-stone-800">
+      <div className="flex items-center justify-between border-t border-stone-200 px-3 py-2 text-xs text-stone-500 dark:text-stone-400 dark:border-stone-800">
         <span>{table.getFilteredRowModel().rows.length} submissions{!showPay && rows.length > 0 && ' · pay rates hidden for your role'}</span>
         <div className="flex items-center gap-2">
           <button disabled={!table.getCanPreviousPage()} onClick={() => table.previousPage()} className="rounded px-2 py-1 hover:bg-stone-100 disabled:opacity-30 dark:hover:bg-stone-800">Prev</button>

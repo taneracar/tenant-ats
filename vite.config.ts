@@ -5,5 +5,5 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   optimizeDeps: { exclude: ['@electric-sql/pglite'] },
-  test: { testTimeout: 20000, hookTimeout: 60000 },
+  test: { include: ['tests/**/*.test.ts'], testTimeout: 20000, hookTimeout: 60000 },
 })
