@@ -127,16 +127,24 @@ export function seedSql(today = new Date(), seed = 42): string {
       const rejected = reached < 5 && rand() < 0.3
       const stage = rejected ? 'rejected' : STAGES[reached]
 
-      // walk the stages forward in time, never past today
-      let t = order.opened.getTime() + int(1, 6) * day
+      // walk the stages forward from the order's open date
+      let t = order.opened.getTime() + int(1, 6) * day + int(8, 17) * 3600_000
       const events: Array<[string | null, string, number]> = []
       let prev: string | null = null
       for (let s = 0; s <= reached; s++) {
-        events.push([prev, STAGES[s], Math.min(t, today.getTime() - 3600_000)])
+        events.push([prev, STAGES[s], t])
         prev = STAGES[s]
         t += int(1, 9) * day
       }
-      if (rejected) events.push([prev, 'rejected', Math.min(t, today.getTime() - 3600_000)])
+      if (rejected) events.push([prev, 'rejected', t])
+      // if the walk ran past today, squeeze it into the time it actually had
+      const first = events[0][2]
+      const end = today.getTime() - int(2, 30) * 3600_000
+      const span = events[events.length - 1][2] - first
+      if (first + span > end && span > 0) {
+        const room = Math.max(end - first, 3600_000)
+        for (const e of events) e[2] = first + ((e[2] - first) / span) * room
+      }
       const last = events[events.length - 1][2]
       const owner = pick(recruiter)
 

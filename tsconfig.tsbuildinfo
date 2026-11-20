@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/components/pipeline.tsx","./src/components/rlslab.tsx","./src/components/ui.tsx","./src/db/client.ts","./src/db/queries.ts","./src/db/seed.ts","./tests/helpers.ts","./tests/rls.test.ts","./vite.config.ts"],"version":"5.9.3"}
