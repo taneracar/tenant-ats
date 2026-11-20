@@ -37,15 +37,39 @@ auth.users ──< memberships >── agencies ──< clients ──< job_orde
 
 ## Tests
 
-`npm test` boots a fresh Postgres in-process, applies the migrations, seeds deterministic data, and runs **34 tests**: isolation on every tenant table for every role, write rules, the composite FKs, history forging, the last-owner rule, cascade deletes, membership changes, and report access.
+Two layers, both run in CI on every push.
 
-The suite was checked against deliberate breakage: making `is_member()` always true fails 16 tests; opening the pay-rate read policy fails 2.
+### Database (Vitest, 34 tests)
+
+`npm test` boots a fresh Postgres in-process, applies the migrations, seeds deterministic data, and checks isolation on every tenant table for every role, write rules, the composite FKs, history forging, the last-owner rule, cascade deletes, membership changes, and report access.
+
+Checked against deliberate breakage: making `is_member()` always true fails 16 tests; opening the pay-rate read policy fails 2.
+
+### End to end (Playwright, 48 runs)
+
+`npm run e2e` builds the production bundle, serves it, and drives it in Chromium at desktop size and on a Pixel 7 profile.
+
+| File | What it proves |
+|---|---|
+| `e2e/roles.spec.ts` | Owner, recruiter, viewer and no-membership users each get the UI their role allows; a Summit owner cannot find Harbor's clients; one person holds different roles in two agencies. |
+| `e2e/pipeline.spec.ts` | Changing a stage records the right actor in history; a change by one user shows up for another; filters, search and funnel-order sorting work. |
+| `e2e/rls-lab.spec.ts` | The SQL console runs as the selected JWT subject; cross-tenant insert fails with `42501`; history cannot be forged; an owner's mass update is rolled back. |
+| `e2e/a11y.spec.ts` | axe-core finds no WCAG 2.1 A/AA violations in any view, for every role, in light and dark mode. |
+| `e2e/smoke.spec.ts` | Boot, no console errors or failed requests, no horizontal scroll (also on mobile). |
+
+Locators use roles and visible text through a small page object (`e2e/fixtures.ts`), no test ids and no fixed sleeps. The suite passed 3 repeated runs (144/144) with no flakes.
+
+What the suite caught while being written: dark-mode secondary text at 3.6:1 contrast (below 4.5:1), and horizontally scrolling tables that keyboard users could not reach on mobile. Both were fixed. Deliberate breakage: showing edit controls to viewers fails 2 tests; dropping the actor from the history trigger fails 1.
+
+The same suite runs against production daily (`npm run e2e:prod`, scheduled job `e2e-prod`). The HTML report is uploaded as a build artifact.
 
 ## Running it
 
 ```bash
 npm install
 npm test
+npx playwright install chromium
+npm run e2e
 npm run dev
 ```
 
@@ -53,7 +77,7 @@ Using it with a real Supabase project: skip `supabase/migrations/0000_supabase_s
 
 ## Stack
 
-React 19, TypeScript, Vite, Tailwind CSS 4, TanStack Table, PGlite (Postgres 18 in WebAssembly), Vitest, GitHub Actions.
+React 19, TypeScript, Vite, Tailwind CSS 4, TanStack Table, PGlite (Postgres 18 in WebAssembly), Vitest, Playwright, axe-core, GitHub Actions.
 
 ## Limits
 
