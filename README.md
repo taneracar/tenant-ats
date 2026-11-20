@@ -1,5 +1,7 @@
 # tenant-ats
 
+**Live demo: [tenant-ats.vercel.app](https://tenant-ats.vercel.app)**
+
 A multi-tenant applicant tracking system for staffing agencies, where **tenant isolation is enforced by Postgres row-level security, not by application code**.
 
 The demo runs real Postgres 18 inside the browser tab ([PGlite](https://pglite.dev)), applies the same migrations a Supabase project would get, and lets you switch between five users to watch the database decide what each of them can see and do.
